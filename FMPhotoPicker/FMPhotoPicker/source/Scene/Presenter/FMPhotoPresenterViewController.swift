@@ -7,12 +7,11 @@
 //
 
 import UIKit
-import AVKit
-import Photos
+//import AVKit
 
 class FMPhotoPresenterViewController: UIViewController {
     // MARK: Outlet
-    private weak var photoTitle: UILabel!
+//    private weak var photoTitle: UILabel!
     private weak var selectedContainer: UIView!
     private weak var selectedIcon: UIImageView!
     private weak var selectedIndex: UILabel!
@@ -202,17 +201,17 @@ class FMPhotoPresenterViewController: UIViewController {
             self.selectedIcon.image = UIImage(named: "check_off", in: .current, compatibleWith: nil)
         }
         
-        // Update photo title
-        if let photoAsset = self.dataSource.photo(atIndex: self.currentPhotoIndex),
-//            let creationDate = photoAsset.asset?.creationDate {
-//            self.photoTitle.text = self.formatter.string(from: creationDate)
-            let asset = photoAsset.asset {
-                let resources = PHAssetResource.assetResources(for: asset)
-                if let resource = resources.first {
-                    let fileName = resource.originalFilename
-                    self.photoTitle.text = fileName
-                }
-        }
+//        // Update photo title
+//        if let photoAsset = self.dataSource.photo(atIndex: self.currentPhotoIndex),
+////            let creationDate = photoAsset.asset?.creationDate {
+////            self.photoTitle.text = self.formatter.string(from: creationDate)
+//            let asset = photoAsset.asset {
+//                let resources = PHAssetResource.assetResources(for: asset)
+//                if let resource = resources.first {
+//                    let fileName = resource.originalFilename
+//                    self.photoTitle.text = fileName
+//                }
+//        }
     }
     
     private func changeToPhoto(photo: FMPhotoAsset) {
@@ -385,17 +384,17 @@ private extension FMPhotoPresenterViewController {
             backButton.bottomAnchor.constraint(equalTo: menuContainer.bottomAnchor)
         ])
         
-        let photoTitle = UILabel()
-        self.photoTitle = photoTitle
-        photoTitle.textColor = kBlackColor
-        photoTitle.font = .boldSystemFont(ofSize: 16)
-        
-        photoTitle.translatesAutoresizingMaskIntoConstraints = false
-        menuContainer.addSubview(photoTitle)
-        NSLayoutConstraint.activate([
-            photoTitle.centerXAnchor.constraint(equalTo: menuContainer.centerXAnchor),
-            photoTitle.centerYAnchor.constraint(equalTo: menuContainer.centerYAnchor),
-        ])
+//        let photoTitle = UILabel()
+//        self.photoTitle = photoTitle
+//        photoTitle.textColor = kBlackColor
+//        photoTitle.font = .boldSystemFont(ofSize: 16)
+//
+//        photoTitle.translatesAutoresizingMaskIntoConstraints = false
+//        menuContainer.addSubview(photoTitle)
+//        NSLayoutConstraint.activate([
+//            photoTitle.centerXAnchor.constraint(equalTo: menuContainer.centerXAnchor),
+//            photoTitle.centerYAnchor.constraint(equalTo: menuContainer.centerYAnchor),
+//        ])
         
         let doneButton = UIButton(type: .custom)
         self.doneButton = doneButton
