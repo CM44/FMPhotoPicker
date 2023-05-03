@@ -41,6 +41,9 @@ public class FMPhotoPickerViewController: UIViewController {
 
     private let config: FMPhotoPickerConfig
     
+    // 是否允许当前所选的媒体文件
+    private var canBeAdded: Bool!
+    
     // The controller for multiple select/deselect
     private lazy var batchSelector: FMPhotoPickerBatchSelector = {
         return FMPhotoPickerBatchSelector(viewController: self, collectionView: self.imageCollectionView, dataSource: self.dataSource)
@@ -94,7 +97,21 @@ public class FMPhotoPickerViewController: UIViewController {
         self.cancelButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: config.titleFontSize)
         self.doneButton.setTitle(config.strings["picker_button_select_done"], for: .normal)
         self.doneButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: config.titleFontSize)
-        self.titleLabel.text = config.strings["picker_title"]
+        
+        var title:String?
+        if config.mediaTypes.count > 1 {
+            title = config.strings["picker_title_file"]
+        }
+        else if config.mediaTypes.contains(.image) {
+            title = config.strings["picker_title_image"]
+        }
+        else if config.mediaTypes.contains(.video) {
+            title = config.strings["picker_title_video"]
+        }
+        else {
+            title = config.strings["picker_title_file"]
+        }
+        self.titleLabel.text = title
     }
     
     @objc private func onTapCancel(_ sender: Any) {
@@ -165,6 +182,9 @@ public class FMPhotoPickerViewController: UIViewController {
     }
     
     private func processDetermination() {
+        if self.canBeAdded == false {
+            return
+        }
         if config.shouldReturnAsset {
             let assets = dataSource.getSelectedPhotos().compactMap { $0.asset }
             delegate?.fmPhotoPickerController(self, didFinishPickingPhotoWith: assets)
@@ -246,35 +266,82 @@ extension FMPhotoPickerViewController: UICollectionViewDataSource {
      the photo will be added to selected list. Otherwise, a warning dialog will be displayed and NOTHING will be added.
      */
     public func tryToAddPhotoToSelectedList(photoIndex index: Int) {
+        let fmAsset = self.dataSource.photoAssets[index]
+        guard let asset = fmAsset.asset else { return }
+        guard let resource = PHAssetResource.assetResources(for: asset).first,
+              let unsignedInt64 = resource.value(forKey: "fileSize") as? CLong else { return }
+        let size = Int64(bitPattern: UInt64(unsignedInt64))
+        
+        // resource.uniformTypeIdentifier:
+        // com.apple.pict
+        // com.compuserve.gif
+        // public.mpeg-4
+        // public.heic
+        // public.png
+        // public.jpeg
+        var errMsg: String = ""
+        self.canBeAdded = true
+        if resource.uniformTypeIdentifier == "com.compuserve.gif" ||
+            asset.mediaType == .audio || asset.mediaType == .unknown  {
+            errMsg = config.strings["picker_warning_over_select_format"]!
+        } else {
+            switch fmAsset.mediaType {
+            case .image:
+                if self.config.imageMaxSize > 0 && size > self.config.imageMaxSize {
+                    errMsg = config.strings["picker_warning_over_select_limit_size"]!
+                }
+            case .video:
+                if self.config.videoMaxSize > 0 && size > self.config.videoMaxSize {
+                    errMsg = config.strings["picker_warning_over_select_limit_size"]!
+                }
+                else if self.config.videoMaxDuration > 0 &&
+                        asset.duration > self.config.videoMaxDuration {
+                    errMsg = config.strings["picker_warning_over_select_limit_duration"]!
+                }
+            case .unsupported: break
+            }
+        }
+        if !errMsg.isEmpty {
+            self.canBeAdded = false
+            let warning = FMWarningView.shared
+            warning.message = String(format: errMsg, self.config.maxImage)
+            warning.showAndAutoHide()
+        }
+        
+#if DEBUG
+        print("name: ", resource.originalFilename)
+        print("uniformTypeIdentifier: ", resource.uniformTypeIdentifier)
+        print("size: ", size)
+        print("duration: ", asset.duration)
+        print("mediaType: ", asset.mediaType == .image ? "照片" : asset.mediaType == .video ? "视频" : "unsupported")
+#endif
+        
         if self.config.selectMode == .multiple {
-            guard let fmMediaType = self.dataSource.mediaTypeForPhoto(atIndex: index) else { return }
-
-            var canBeAdded = true
-            
-            switch fmMediaType {
+            switch fmAsset.mediaType {
             case .image:
                 if self.dataSource.countSelectedPhoto(byType: .image) >= self.config.maxImage {
-                    canBeAdded = false
+                    self.canBeAdded = false
                     let warning = FMWarningView.shared
                     warning.message = String(format: config.strings["picker_warning_over_image_select_format"]!, self.config.maxImage)
                     warning.showAndAutoHide()
                 }
             case .video:
                 if self.dataSource.countSelectedPhoto(byType: .video) >= self.config.maxVideo {
-                    canBeAdded = false
+                    self.canBeAdded = false
                     let warning = FMWarningView.shared
                     warning.message = String(format: config.strings["picker_warning_over_video_select_format"]!, self.config.maxVideo)
                     warning.showAndAutoHide()
                 }
             case .unsupported:
+                self.canBeAdded = false
                 break
             }
-            
-            if canBeAdded {
+            if self.canBeAdded {
                 self.dataSource.setSeletedForPhoto(atIndex: index)
                 self.imageCollectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
                 self.updateControlBar()
             }
+            
         } else {  // single selection mode
             var indexPaths = [IndexPath]()
             self.dataSource.getSelectedPhotos().forEach { photo in
@@ -283,10 +350,12 @@ extension FMPhotoPickerViewController: UICollectionViewDataSource {
                 self.dataSource.unsetSeclectedForPhoto(atIndex: photoIndex)
             }
             
-            self.dataSource.setSeletedForPhoto(atIndex: index)
-            indexPaths.append(IndexPath(row: index, section: 0))
-            self.imageCollectionView.reloadItems(at: indexPaths)
-            self.updateControlBar()
+            if self.canBeAdded {
+                self.dataSource.setSeletedForPhoto(atIndex: index)
+                indexPaths.append(IndexPath(row: index, section: 0))
+                self.imageCollectionView.reloadItems(at: indexPaths)
+                self.updateControlBar()
+            }
         }
     }
 }

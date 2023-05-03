@@ -16,7 +16,7 @@ class ViewController: UIViewController, FMPhotoPickerViewControllerDelegate, FMI
         previewImageView.image = photo
     }
     
-//    func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith photos: [UIImage])
+//    func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith photos: [UIImage]) {
     func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith assets: [PHAsset]) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -91,6 +91,11 @@ class ViewController: UIViewController, FMPhotoPickerViewControllerDelegate, FMI
         config.maxVideo = self.maxVideo
         config.forceCropEnabled = forceCropEnabled.isOn
         config.eclipsePreviewEnabled = eclipsePreviewEnabled.isOn
+        config.shouldReturnAsset = true
+        
+        config.imageMaxSize = 0
+        config.videoMaxSize = 0
+        config.videoMaxDuration = 7.0
         
         // in force crop mode, only the first crop option is available
         config.availableCrops = [

@@ -45,11 +45,16 @@ public enum FMMediaType {
 public struct FMPhotoPickerConfig {
     public var mediaTypes: [FMMediaType] = [.image]
     public var selectMode: FMSelectMode = .multiple
-    public var maxImage: Int = 10
-    public var maxVideo: Int = 10
+    public var maxImage: Int = 9
+    public var maxVideo: Int = 9
+    /// 0为不限制
+    public var imageMaxSize: Int64 = 0
+    public var videoMaxSize: Int64 = 0
+    public var videoMaxDuration: Double = 0.0
+    
     public var availableFilters: [FMFilterable]? = kDefaultAvailableFilters
     public var availableCrops: [FMCroppable]? = kDefaultAvailableCrops
-    public var useCropFirst: Bool = false
+    public var useCropFirst: Bool = true
     public var alertController: FMAlertable = FMAlert()
 
     /// Whether you want FMPhotoPicker returns PHAsset instead of UIImage.
@@ -61,11 +66,16 @@ public struct FMPhotoPickerConfig {
     public var titleFontSize: CGFloat = 17
     
     public var strings: [String: String] = [
-        "picker_title":                             "选择照片",
+        "picker_title_image":                       "选择照片",
+        "picker_title_video":                       "选择视频",
+        "picker_title_file":                        "选择文件",
         "picker_button_cancel":                     "取消",
         "picker_button_select_done":                "完成",
         "picker_warning_over_image_select_format":  "最多只可选择 %d 张照片",
         "picker_warning_over_video_select_format":  "最多只可选择 %d 个视频",
+        "picker_warning_over_select_format":        "不支持的媒体类型",
+        "picker_warning_over_select_limit_size":    "大小超出限制",
+        "picker_warning_over_select_limit_duration":"视频时长超出限制",
         
         "present_title_photo_created_date_format":  "yyyy/M/d",
         "present_button_back":                      "返回",
