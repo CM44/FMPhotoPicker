@@ -189,7 +189,8 @@ class FMPhotoPresenterViewController: UIViewController {
         // Update selection status
         if let selectedIndex = self.dataSource.selectedIndexOfPhoto(atIndex: self.currentPhotoIndex) {
             if self.config.selectMode == .multiple {
-                self.selectedIndex.isHidden = false
+//                self.selectedIndex.isHidden = false
+                self.selectedIndex.isHidden = true
                 self.selectedIndex.text = "\(selectedIndex + 1)"
                 self.selectedIcon.image = UIImage(named: "check_on", in: .current, compatibleWith: nil)
             } else {
@@ -370,15 +371,15 @@ private extension FMPhotoPresenterViewController {
         self.backButton = backButton
         backButton.setTitleColor(kBlackColor, for: .normal)
         backButton.setImage(UIImage(named: "icon_back", in: .current, compatibleWith: nil), for: .normal)
-        backButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -4)
-        backButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: -4)
+        backButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -6)
+        backButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6)
         backButton.addTarget(self, action: #selector(onTapClose(_:)), for: .touchUpInside)
         backButton.tintColor = kBlackColor
         
         backButton.translatesAutoresizingMaskIntoConstraints = false
         menuContainer.addSubview(backButton)
         NSLayoutConstraint.activate([
-            backButton.leftAnchor.constraint(equalTo: menuContainer.leftAnchor, constant: 8),
+            backButton.leftAnchor.constraint(equalTo: menuContainer.leftAnchor, constant: 10),
             backButton.centerYAnchor.constraint(equalTo: menuContainer.centerYAnchor),
             backButton.topAnchor.constraint(equalTo: menuContainer.topAnchor),
             backButton.bottomAnchor.constraint(equalTo: menuContainer.bottomAnchor)
@@ -415,7 +416,7 @@ private extension FMPhotoPresenterViewController {
         self.numberOfSelectedPhotoContainer = numberOfSelectedPhotoContainer
         numberOfSelectedPhotoContainer.layer.cornerRadius = 14
         numberOfSelectedPhotoContainer.layer.masksToBounds = true
-        numberOfSelectedPhotoContainer.backgroundColor = kRedColor
+        numberOfSelectedPhotoContainer.backgroundColor = kBlueColor
         
         numberOfSelectedPhotoContainer.translatesAutoresizingMaskIntoConstraints = false
         menuContainer.addSubview(numberOfSelectedPhotoContainer)

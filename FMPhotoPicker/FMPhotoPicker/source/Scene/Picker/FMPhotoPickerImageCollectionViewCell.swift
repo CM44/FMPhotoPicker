@@ -94,8 +94,9 @@ class FMPhotoPickerImageCollectionViewCell: UICollectionViewCell {
         
         let cellFilterContainer = UIView()
         self.cellFilterContainer = cellFilterContainer
-        cellFilterContainer.layer.borderColor = kRedColor.cgColor
-        cellFilterContainer.layer.borderWidth = 2
+//        cellFilterContainer.layer.borderColor = kRedColor.cgColor
+//        cellFilterContainer.layer.borderWidth = 2
+        cellFilterContainer.backgroundColor = .black.withAlphaComponent(0.3)
         cellFilterContainer.isHidden = true
         
         contentView.addSubview(cellFilterContainer)
@@ -108,16 +109,16 @@ class FMPhotoPickerImageCollectionViewCell: UICollectionViewCell {
         ])
         
         let selectButton = UIButton()
+        selectButton.setImage(UIImage(named: "check_off", in: .current, compatibleWith: nil)?.resize(toSizeInPoint: CGSize(width: 22, height: 22)), for: .normal)
+        selectButton.setImage(UIImage(named: "check_on", in: .current, compatibleWith: nil)?.resize(toSizeInPoint: CGSize(width: 22, height: 22)), for: .selected)
         self.selectButton = selectButton
         selectButton.addTarget(self, action: #selector(onTapSelects(_:)), for: .touchUpInside)
         
         contentView.addSubview(selectButton)
         selectButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            selectButton.topAnchor.constraint(equalTo: contentView.topAnchor),
-            selectButton.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            selectButton.heightAnchor.constraint(equalToConstant: 40),
-            selectButton.widthAnchor.constraint(equalToConstant: 40)
+            selectButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            selectButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10),
         ])
         
         
@@ -129,8 +130,8 @@ class FMPhotoPickerImageCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(selectedIndex)
         selectedIndex.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            selectedIndex.centerXAnchor.constraint(equalTo: selectButton.centerXAnchor),
             selectedIndex.centerYAnchor.constraint(equalTo: selectButton.centerYAnchor),
+            selectedIndex.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10),
         ])
         
         let editedMarkImageView = UIImageView()
@@ -196,16 +197,15 @@ class FMPhotoPickerImageCollectionViewCell: UICollectionViewCell {
             if self.selectMode == .multiple {
                 self.selectedIndex.isHidden = false
                 self.selectedIndex.text = "\(selectedIndex + 1)"
-                self.selectButton.setImage(UIImage(named: "check_on", in: .current, compatibleWith: nil), for: .normal)
+                self.selectButton.isSelected = true
             } else {
                 self.selectedIndex.isHidden = true
-                self.selectButton.setImage(UIImage(named: "single_check_on", in: .current, compatibleWith: nil), for: .normal)
             }
             self.cellFilterContainer.isHidden = false
         } else {
             self.selectedIndex.isHidden = true
             self.cellFilterContainer.isHidden = true
-            self.selectButton.setImage(UIImage(named: "check_off", in: .current, compatibleWith: nil), for: .normal)
+            self.selectButton.isSelected = false
         }
     }
 }

@@ -92,7 +92,7 @@ public struct FMPhotoPickerConfig {
         "editor_crop_ratio16x9":                    "16:9",
         "editor_crop_ratio9x16":                    "9:16",
         "editor_crop_ratioCustom":                  "任意",
-        "editor_crop_ratioOrigin":                  "原比例",
+        "editor_crop_ratioOrigin":                  "原始比例",
         "editor_crop_ratioSquare":                  "正方形",
 
         "permission_dialog_title":                  "选择照片",

@@ -9,7 +9,7 @@
 import UIKit
 
 class FMPhotoPickerImageCollectionViewLayout: UICollectionViewFlowLayout {
-    let numberOfColumns: CGFloat = 3
+    let numberOfColumns: CGFloat = 4
     let padding: CGFloat = 1
     
     override init() {
