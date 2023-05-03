@@ -61,22 +61,22 @@ public struct FMPhotoPickerConfig {
     public var titleFontSize: CGFloat = 17
     
     public var strings: [String: String] = [
-        "picker_title":                             "Select Photos",
-        "picker_button_cancel":                     "Cancel",
-        "picker_button_select_done":                "Done",
+        "picker_title":                             "选择照片",
+        "picker_button_cancel":                     "取消",
+        "picker_button_select_done":                "完成",
         "picker_warning_over_image_select_format":  "You can select maximum %d images",
         "picker_warning_over_video_select_format":  "You can select maximum %d videos",
         
         "present_title_photo_created_date_format":  "yyyy/M/d",
-        "present_button_back":                      "Back",
-        "present_button_edit_image":                "Edit",
+        "present_button_back":                      "返回",
+        "present_button_edit_image":                "编辑",
         
-        "editor_button_cancel":                     "Cancel",
-        "editor_button_done":                       "Done",
-        "editor_menu_filter":                       "Filter",
-        "editor_menu_crop":                         "Crop",
-        "editor_menu_crop_button_reset":            "Reset",
-        "editor_menu_crop_button_rotate":           "Rotate",
+        "editor_button_cancel":                     "取消",
+        "editor_button_done":                       "完成",
+        "editor_menu_filter":                       "滤镜",
+        "editor_menu_crop":                         "裁剪",
+        "editor_menu_crop_button_reset":            "恢复",
+        "editor_menu_crop_button_rotate":           "旋转",
         
         "editor_crop_ratio4x3":                     "4:3",
         "editor_crop_ratio16x9":                    "16:9",
@@ -85,10 +85,10 @@ public struct FMPhotoPickerConfig {
         "editor_crop_ratioOrigin":                  "Origin",
         "editor_crop_ratioSquare":                  "Square",
 
-        "permission_dialog_title":                  "FMPhotoPicker",
-        "permission_dialog_message":                "FMPhotoPicker wants to access Photo Library",
-        "permission_button_ok":                     "OK",
-        "permission_button_cancel":                 "Cancel"
+        "permission_dialog_title":                  "选择照片",
+        "permission_dialog_message":                "App 想要访问照片库",
+        "permission_button_ok":                     "允许",
+        "permission_button_cancel":                 "拒绝"
     ]
     
     public init() {
