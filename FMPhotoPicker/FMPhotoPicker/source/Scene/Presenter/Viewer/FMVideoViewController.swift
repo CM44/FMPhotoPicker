@@ -85,8 +85,7 @@ class FMVideoViewController: FMPhotoViewController {
             let asset = photo.asset else { return }
         
         Helper.requestAVAsset(asset: asset) { avAsset in
-            // Do not run on main thread for better perf
-            DispatchQueue.global(qos: .userInitiated).async {
+            DispatchQueue.main.async {
                 guard self.shouldUpdateView == true,
                     let avAsset = avAsset else { return }
                 
@@ -96,10 +95,8 @@ class FMVideoViewController: FMPhotoViewController {
                 self.playerController = AVPlayerViewController()
                 self.playerController?.player = self.player
                 
-                DispatchQueue.main.async {
-                    self.playerController?.view.frame = self.view.frame
-                    self.playerController?.showsPlaybackControls = false
-                }
+                self.playerController?.view.frame = self.view.frame
+                self.playerController?.showsPlaybackControls = false
                 
                 self.addPlayerTimeObserverIfNeeded()
             }
