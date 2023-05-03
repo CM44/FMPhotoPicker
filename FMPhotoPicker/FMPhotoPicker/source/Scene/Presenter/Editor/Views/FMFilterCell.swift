@@ -9,7 +9,7 @@
 import UIKit
 
 class FMFilterCell: UICollectionViewCell {
-    static let reussId = String(describing: self)
+    static let reussId = String(describing: FMFilterCell.self)
     public var imageView: UIImageView
     public var name: UILabel
     

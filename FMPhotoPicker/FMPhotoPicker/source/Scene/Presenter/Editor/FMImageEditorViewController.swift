@@ -11,7 +11,7 @@ import UIKit
 let kContentFrameSpacing: CGFloat = 22.0
 
 // MARK: - Delegate protocol
-public protocol FMImageEditorViewControllerDelegate: class {
+public protocol FMImageEditorViewControllerDelegate: AnyObject {
     func fmImageEditorViewController(_ editor: FMImageEditorViewController, didFinishEdittingPhotoWith photo: UIImage)
 }
 

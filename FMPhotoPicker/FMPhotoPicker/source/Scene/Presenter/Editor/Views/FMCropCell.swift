@@ -9,7 +9,7 @@
 import UIKit
 
 class FMCropCell: UICollectionViewCell {
-    static let reussId = String(describing: self)
+    static let reussId = String(describing: FMCropCell.self)
     public var imageView: UIImageView
     public var name: UILabel
     
