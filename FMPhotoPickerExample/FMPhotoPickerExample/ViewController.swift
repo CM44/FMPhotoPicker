@@ -14,12 +14,20 @@ class ViewController: UIViewController, FMPhotoPickerViewControllerDelegate, FMI
     func fmImageEditorViewController(_ editor: FMImageEditorViewController, didFinishEdittingPhotoWith photo: UIImage) {
         self.dismiss(animated: true, completion: nil)
         previewImageView.image = photo
+        print("didFinishEdittingPhotoWith:", photo.size)
     }
     
 //    func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith photos: [UIImage]) {
     func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith assets: [PHAsset]) {
         self.dismiss(animated: true, completion: nil)
+        print("didFinishPickingPhotoWith:", assets.count)
     }
+    
+    func fmPhotoPickerController(didCancel picker: FMPhotoPickerViewController) {
+        print("didCancel")
+        
+    }
+    
     
     @IBOutlet weak var selectMode: UISegmentedControl!
     @IBOutlet weak var allowImage: UISwitch!

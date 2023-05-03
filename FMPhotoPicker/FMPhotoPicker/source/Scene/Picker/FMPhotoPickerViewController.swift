@@ -13,11 +13,13 @@ import Photos
 public protocol FMPhotoPickerViewControllerDelegate: AnyObject {
     func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith photos: [UIImage])
     func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith assets: [PHAsset])
+    func fmPhotoPickerController(didCancel picker: FMPhotoPickerViewController)
 }
 
 public extension FMPhotoPickerViewControllerDelegate {
     func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith photos: [UIImage]) {}
     func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith assets: [PHAsset]) {}
+    func fmPhotoPickerController(didCancel picker: FMPhotoPickerViewController) {}
 }
 
 public class FMPhotoPickerViewController: UIViewController {
@@ -115,6 +117,7 @@ public class FMPhotoPickerViewController: UIViewController {
     }
     
     @objc private func onTapCancel(_ sender: Any) {
+        delegate?.fmPhotoPickerController(didCancel: self)
         self.dismiss(animated: true)
     }
     
