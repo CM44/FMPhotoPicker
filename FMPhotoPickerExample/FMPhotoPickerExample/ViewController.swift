@@ -8,6 +8,7 @@
 
 import UIKit
 import FMPhotoPicker
+import Photos
 
 class ViewController: UIViewController, FMPhotoPickerViewControllerDelegate, FMImageEditorViewControllerDelegate {
     func fmImageEditorViewController(_ editor: FMImageEditorViewController, didFinishEdittingPhotoWith photo: UIImage) {
@@ -15,7 +16,8 @@ class ViewController: UIViewController, FMPhotoPickerViewControllerDelegate, FMI
         previewImageView.image = photo
     }
     
-    func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith photos: [UIImage]) {
+//    func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith photos: [UIImage])
+    func fmPhotoPickerController(_ picker: FMPhotoPickerViewController, didFinishPickingPhotoWith assets: [PHAsset]) {
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -99,9 +101,14 @@ class ViewController: UIViewController, FMPhotoPickerViewControllerDelegate, FMI
             FMCrop.ratio9x16,
             FMCrop.ratioOrigin,
         ]
+        // disable crop
+//        config.availableCrops = nil
+        
         
         // all available filters will be used
-        config.availableFilters = []
+//        config.availableFilters = []
+        // disable filters
+        config.availableFilters = nil
         
         return config
     }

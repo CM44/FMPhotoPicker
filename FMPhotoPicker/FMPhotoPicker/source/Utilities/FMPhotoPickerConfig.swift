@@ -64,8 +64,8 @@ public struct FMPhotoPickerConfig {
         "picker_title":                             "选择照片",
         "picker_button_cancel":                     "取消",
         "picker_button_select_done":                "完成",
-        "picker_warning_over_image_select_format":  "You can select maximum %d images",
-        "picker_warning_over_video_select_format":  "You can select maximum %d videos",
+        "picker_warning_over_image_select_format":  "最多只可选择 %d 张照片",
+        "picker_warning_over_video_select_format":  "最多只可选择 %d 个视频",
         
         "present_title_photo_created_date_format":  "yyyy/M/d",
         "present_button_back":                      "返回",
@@ -80,10 +80,10 @@ public struct FMPhotoPickerConfig {
         
         "editor_crop_ratio4x3":                     "4:3",
         "editor_crop_ratio16x9":                    "16:9",
-        "editor_crop_ratio9x16":                    "9x16",
-        "editor_crop_ratioCustom":                  "Custom",
-        "editor_crop_ratioOrigin":                  "Origin",
-        "editor_crop_ratioSquare":                  "Square",
+        "editor_crop_ratio9x16":                    "9:16",
+        "editor_crop_ratioCustom":                  "任意",
+        "editor_crop_ratioOrigin":                  "原比例",
+        "editor_crop_ratioSquare":                  "正方形",
 
         "permission_dialog_title":                  "选择照片",
         "permission_dialog_message":                "App 想要访问照片库",

@@ -8,6 +8,7 @@
 
 import UIKit
 import AVKit
+import Photos
 
 class FMPhotoPresenterViewController: UIViewController {
     // MARK: Outlet
@@ -203,8 +204,14 @@ class FMPhotoPresenterViewController: UIViewController {
         
         // Update photo title
         if let photoAsset = self.dataSource.photo(atIndex: self.currentPhotoIndex),
-            let creationDate = photoAsset.asset?.creationDate {
-            self.photoTitle.text = self.formatter.string(from: creationDate)
+//            let creationDate = photoAsset.asset?.creationDate {
+//            self.photoTitle.text = self.formatter.string(from: creationDate)
+            let asset = photoAsset.asset {
+                let resources = PHAssetResource.assetResources(for: asset)
+                if let resource = resources.first {
+                    let fileName = resource.originalFilename
+                    self.photoTitle.text = fileName
+                }
         }
     }
     
