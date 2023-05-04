@@ -124,7 +124,7 @@ class FMPhotoPickerImageCollectionViewCell: UICollectionViewCell {
         
         let selectedIndex = UILabel()
         self.selectedIndex = selectedIndex
-        selectedIndex.font = .systemFont(ofSize: 15)
+        selectedIndex.font = .systemFont(ofSize: 15, weight: .semibold)
         selectedIndex.textColor = .white
         
         contentView.addSubview(selectedIndex)
