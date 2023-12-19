@@ -95,10 +95,11 @@ public class FMPhotoPickerViewController: UIViewController {
         self.doneButton.isHidden = true
         
         // set button title
+        let font = UIFont.systemFont(ofSize: config.titleFontSize, weight: .regular)
         self.cancelButton.setTitle(config.strings["picker_button_cancel"], for: .normal)
-        self.cancelButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: config.titleFontSize)
+        self.cancelButton.titleLabel!.font = font
         self.doneButton.setTitle(config.strings["picker_button_select_done"], for: .normal)
-        self.doneButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: config.titleFontSize)
+        self.doneButton.titleLabel!.font = font
         
         var title:String?
         if config.mediaTypes.count > 1 {
@@ -271,34 +272,72 @@ extension FMPhotoPickerViewController: UICollectionViewDataSource {
     public func tryToAddPhotoToSelectedList(photoIndex index: Int) {
         let fmAsset = self.dataSource.photoAssets[index]
         guard let asset = fmAsset.asset else { return }
+        var errMsg: String = ""
+        self.canBeAdded = true
+        
+        // check count
+        if self.config.selectMode == .multiple {
+            let imageCount = self.dataSource.countSelectedPhoto(byType: .image)
+            let videoCount = self.dataSource.countSelectedPhoto(byType: .video)
+            
+            if self.config.mediaTypes.contains(.image) && self.config.mediaTypes.contains(.video) {
+                if (imageCount + videoCount) >= self.config.maxCount {
+                    errMsg = config.strings["picker_warning_over_media_select_format"]!
+                }
+            }
+            else {
+                switch fmAsset.mediaType {
+                case .image:
+                    if imageCount >= self.config.maxCount {
+                        errMsg = config.strings["picker_warning_over_image_select_format"]!
+                    }
+                case .video:
+                    if videoCount >= self.config.maxCount {
+                        errMsg = config.strings["picker_warning_over_video_select_format"]!
+                    }
+                case .unsupported:
+                    self.canBeAdded = false
+                    break
+                }
+            }
+            if !errMsg.isEmpty {
+                self.canBeAdded = false
+                let warning = FMWarningView.shared
+                warning.message = String(format: errMsg, self.config.maxCount)
+                warning.showAndAutoHide()
+                return
+            }
+        }
+
         guard let resource = PHAssetResource.assetResources(for: asset).first,
               let unsignedInt64 = resource.value(forKey: "fileSize") as? CLong else { return }
         let size = Int64(bitPattern: UInt64(unsignedInt64))
         
         // resource.uniformTypeIdentifier:
-        // com.apple.pict
-        // com.compuserve.gif
-        // public.mpeg-4
-        // public.heic
-        // public.png
-        // public.jpeg
-        var errMsg: String = ""
-        self.canBeAdded = true
+        //      com.apple.quicktime-movie
+        //      com.apple.pict
+        //      com.compuserve.gif
+        //      public.mpeg-4
+        //      public.heic
+        //      public.png
+        //      public.jpeg
         if resource.uniformTypeIdentifier == "com.compuserve.gif" ||
             asset.mediaType == .audio || asset.mediaType == .unknown  {
-            errMsg = config.strings["picker_warning_over_select_format"]!
+            errMsg = config.strings["picker_warning_over_select_limit_format"]!
         } else {
             switch fmAsset.mediaType {
             case .image:
                 if self.config.imageMaxSize > 0 && size > self.config.imageMaxSize {
                     errMsg = config.strings["picker_warning_over_select_limit_size"]!
                 }
+                else if self.config.imageMaxPixel > 0 && (asset.pixelWidth * asset.pixelHeight) > self.config.imageMaxPixel {
+                    errMsg = config.strings["picker_warning_over_select_limit_pixel"]!
+                }
             case .video:
                 if self.config.videoMaxSize > 0 && size > self.config.videoMaxSize {
                     errMsg = config.strings["picker_warning_over_select_limit_size"]!
                 }
-                else if self.config.videoMaxDuration > 0 &&
-                        asset.duration > self.config.videoMaxDuration {
+                else if self.config.videoMaxDuration > 0 && asset.duration > self.config.videoMaxDuration {
                     errMsg = config.strings["picker_warning_over_select_limit_duration"]!
                 }
             case .unsupported: break
@@ -307,45 +346,27 @@ extension FMPhotoPickerViewController: UICollectionViewDataSource {
         if !errMsg.isEmpty {
             self.canBeAdded = false
             let warning = FMWarningView.shared
-            warning.message = String(format: errMsg, self.config.maxImage)
+            warning.message = errMsg
             warning.showAndAutoHide()
+            return
         }
-        
-#if DEBUG
-        print("name: ", resource.originalFilename)
-        print("uniformTypeIdentifier: ", resource.uniformTypeIdentifier)
-        print("size: ", size)
-        print("duration: ", asset.duration)
-        print("mediaType: ", asset.mediaType == .image ? "照片" : asset.mediaType == .video ? "视频" : "unsupported")
-#endif
-        
+
         if self.config.selectMode == .multiple {
-            switch fmAsset.mediaType {
-            case .image:
-                if self.dataSource.countSelectedPhoto(byType: .image) >= self.config.maxImage {
-                    self.canBeAdded = false
-                    let warning = FMWarningView.shared
-                    warning.message = String(format: config.strings["picker_warning_over_image_select_format"]!, self.config.maxImage)
-                    warning.showAndAutoHide()
-                }
-            case .video:
-                if self.dataSource.countSelectedPhoto(byType: .video) >= self.config.maxVideo {
-                    self.canBeAdded = false
-                    let warning = FMWarningView.shared
-                    warning.message = String(format: config.strings["picker_warning_over_video_select_format"]!, self.config.maxVideo)
-                    warning.showAndAutoHide()
-                }
-            case .unsupported:
-                self.canBeAdded = false
-                break
-            }
             if self.canBeAdded {
                 self.dataSource.setSeletedForPhoto(atIndex: index)
                 self.imageCollectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
                 self.updateControlBar()
+#if DEBUG
+                print("====SeletedForPhoto====")
+                print("name: ", resource.originalFilename)
+                print("uniformTypeIdentifier: ", resource.uniformTypeIdentifier)
+                print("size: ", size)
+                print("duration: ", asset.duration)
+                print("mediaType: ", asset.mediaType == .image ? "照片" : asset.mediaType == .video ? "视频" : "unsupported")
+#endif
             }
-            
-        } else {  // single selection mode
+        }
+        else {
             var indexPaths = [IndexPath]()
             self.dataSource.getSelectedPhotos().forEach { photo in
                 guard let photoIndex = self.dataSource.index(ofPhoto: photo) else { return }
@@ -361,6 +382,7 @@ extension FMPhotoPickerViewController: UICollectionViewDataSource {
             }
         }
     }
+    
 }
 
 // MARK: - UICollectionViewDelegate

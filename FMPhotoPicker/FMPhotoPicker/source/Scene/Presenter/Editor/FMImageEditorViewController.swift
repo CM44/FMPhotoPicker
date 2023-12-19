@@ -221,17 +221,18 @@ public class FMImageEditorViewController: UIViewController {
         }
         
         // set buttons title
+        let font = UIFont.systemFont(ofSize: config.titleFontSize, weight: .regular)
         cancelButton.setTitle(config.strings["editor_button_cancel"], for: .normal)
-        cancelButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: config.titleFontSize)
+        cancelButton.titleLabel!.font = font
         
         doneButton.setTitle(config.strings["editor_button_done"], for: .normal)
-        doneButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: config.titleFontSize)
+        doneButton.titleLabel!.font = font
         
         filterMenuButton.setTitle(config.strings["editor_menu_filter"], for: .normal)
-        filterMenuButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: config.titleFontSize)
+        filterMenuButton.titleLabel!.font = font
         
         cropMenuButton.setTitle(config.strings["editor_menu_crop"], for: .normal)
-        cropMenuButton.titleLabel!.font = UIFont.boldSystemFont(ofSize: config.titleFontSize)
+        cropMenuButton.titleLabel!.font = font
         
         filterMenuButton.isHidden = config.availableFilters == nil
         cropMenuButton.isHidden = config.availableCrops == nil

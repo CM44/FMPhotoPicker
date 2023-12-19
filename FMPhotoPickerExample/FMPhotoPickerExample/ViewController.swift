@@ -38,8 +38,8 @@ class ViewController: UIViewController, FMPhotoPickerViewControllerDelegate, FMI
     @IBOutlet weak var forceCropEnabled: UISwitch!
     @IBOutlet weak var eclipsePreviewEnabled: UISwitch!
     
-    private var maxImage: Int = 5
-    private var maxVideo: Int = 5
+    private var maxImage: Int = 2
+    private var maxVideo: Int = 2
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,13 +95,15 @@ class ViewController: UIViewController, FMPhotoPickerViewControllerDelegate, FMI
         
         config.selectMode = selectMode
         config.mediaTypes = mediaTypes
-        config.maxImage = self.maxImage
-        config.maxVideo = self.maxVideo
+//        config.maxImage = self.maxImage
+//        config.maxVideo = self.maxVideo
+        config.maxCount = self.maxImage + self.maxVideo
         config.forceCropEnabled = forceCropEnabled.isOn
         config.eclipsePreviewEnabled = eclipsePreviewEnabled.isOn
         config.shouldReturnAsset = true
         
         config.imageMaxSize = 0
+        config.imageMaxPixel = 0
         config.videoMaxSize = 0
         config.videoMaxDuration = 7.0
         
@@ -115,7 +117,7 @@ class ViewController: UIViewController, FMPhotoPickerViewControllerDelegate, FMI
             FMCrop.ratioOrigin,
         ]
         // disable crop
-//        config.availableCrops = nil
+        config.availableCrops = nil
         
         
         // all available filters will be used

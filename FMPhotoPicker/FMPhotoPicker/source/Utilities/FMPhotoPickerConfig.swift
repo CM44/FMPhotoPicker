@@ -45,10 +45,10 @@ public enum FMMediaType {
 public struct FMPhotoPickerConfig {
     public var mediaTypes: [FMMediaType] = [.image]
     public var selectMode: FMSelectMode = .multiple
-    public var maxImage: Int = 9
-    public var maxVideo: Int = 9
+    public var maxCount: Int = 9
     /// 0为不限制
     public var imageMaxSize: Int64 = 0
+    public var imageMaxPixel: Int64 = 0
     public var videoMaxSize: Int64 = 0
     public var videoMaxDuration: Double = 0.0
     
@@ -63,7 +63,7 @@ public struct FMPhotoPickerConfig {
     public var forceCropEnabled = false
     public var eclipsePreviewEnabled = false
     
-    public var titleFontSize: CGFloat = 17
+    public var titleFontSize: CGFloat = 16
     
     public var strings: [String: String] = [
         "picker_title_image":                       "选择照片",
@@ -73,7 +73,9 @@ public struct FMPhotoPickerConfig {
         "picker_button_select_done":                "完成",
         "picker_warning_over_image_select_format":  "最多只可选择 %d 张照片",
         "picker_warning_over_video_select_format":  "最多只可选择 %d 个视频",
-        "picker_warning_over_select_format":        "不支持的媒体类型",
+        "picker_warning_over_media_select_format":  "最多只可选择 %d 个文件",
+        "picker_warning_over_select_limit_format":  "不支持的媒体类型",
+        "picker_warning_over_select_limit_pixel":   "分辨率超出限制",
         "picker_warning_over_select_limit_size":    "大小超出限制",
         "picker_warning_over_select_limit_duration":"视频时长超出限制",
         
