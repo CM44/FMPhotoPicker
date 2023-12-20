@@ -108,7 +108,8 @@ class FMPhotoPickerImageCollectionViewCell: UICollectionViewCell {
             cellFilterContainer.leftAnchor.constraint(equalTo: contentView.leftAnchor),
         ])
         
-        let selectButton = UIButton()
+        let selectButton = EnlargeEdgeButton()
+        selectButton.enlargeEdge = UIEdgeInsets(top: 5, left: 15, bottom: 15, right: 5)
         selectButton.setImage(UIImage(named: "check_off", in: .current, compatibleWith: nil)?.resize(toSizeInPoint: CGSize(width: 22, height: 22)), for: .normal)
         selectButton.setImage(UIImage(named: "check_on", in: .current, compatibleWith: nil)?.resize(toSizeInPoint: CGSize(width: 22, height: 22)), for: .selected)
         self.selectButton = selectButton
